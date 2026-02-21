@@ -128,7 +128,7 @@
 	{#await productAttributes}
 		<div class="flex items-center justify-center py-8">
 			<span class="loading loading-spinner loading-lg"></span>
-			<span class="ml-2">Loading product attributes...</span>
+			<span class="ml-2">{$_('product.loading_attributes')}</span>
 		</div>
 	{:then attributes}
 		{#if attributes != null}
@@ -137,9 +137,9 @@
 			<div class="alert alert-warning">
 				<IconMdiWarning class="h-6 w-6 shrink-0" />
 				<div>
-					<h3 class="font-bold">Unable to load personalized attributes</h3>
+					<h3 class="font-bold">{$_('product.attributes_error_title')}</h3>
 					<p>
-						There was an error while loading the personalized attributes. Please try again later.
+						{$_('product.attributes_error_message')}
 					</p>
 				</div>
 			</div>
