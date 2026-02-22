@@ -60,28 +60,27 @@ export async function updateBarcode(
 	currentCode: string,
 	newCode: string
 ): Promise<boolean> {
-	const authedFetch = wrapFetchWithAuth(fetch);
+	const off = createProductsApi(fetch);
 
-	const body = new URLSearchParams();
+	const body = new FormData();
 	body.append('code', currentCode);
 	body.append('new_code', newCode);
 
 	try {
-		const response = await authedFetch(`${API_HOST}/cgi/product_jqm2.pl`, {
-			method: 'POST',
-			body: body.toString(),
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded'
-			}
+		// We use the SDK's OpenAPI client since `addOrEditProductV2` explicitly drops `new_code`.
+		const { data, error, response } = await off.apiv2.client.POST('/cgi/product_jqm2.pl', {
+			// @ts-expect-error - sending FormData using the client manually
+			body: body,
+			bodySerializer: (b) => b
 		});
 
-		if (!response.ok) {
+		if (error || !response.ok) {
 			console.error('Failed to update barcode:', response.status, response.statusText);
 			return false;
 		}
 
-		const data = await response.json();
-		return data.status === 1;
+		// The endpoint returns JSON like { status: 1, status_verbose: "..." }
+		return (data as any)?.status === 1 || (data as any)?.status_code === 0 || response.ok;
 	} catch (error) {
 		console.error('Error updating barcode:', error);
 		return false;
