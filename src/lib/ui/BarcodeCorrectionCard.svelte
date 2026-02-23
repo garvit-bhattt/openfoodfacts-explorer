@@ -3,7 +3,6 @@
 	import { _ } from '$lib/i18n';
 	import { updateBarcode } from '$lib/api';
 	import { getToastCtx } from '$lib/stores/toasts';
-	import Card from './Card.svelte';
 
 	import IconMdiBarcode from '@iconify-svelte/mdi/barcode';
 

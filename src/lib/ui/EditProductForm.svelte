@@ -14,13 +14,11 @@
 	import IconMdiCommentText from '@iconify-svelte/mdi/comment-text';
 	import IconMdiShieldAccount from '@iconify-svelte/mdi/shield-account';
 
-	import type { Product, RawImage, addOrEditProductV2 } from '$lib/api';
+	import type { Product } from '$lib/api';
 	import { _ } from '$lib/i18n';
 	import { preferences } from '$lib/settings';
 	import { userInfo } from '$lib/stores/user';
 	import BarcodeCorrectionCard from './BarcodeCorrectionCard.svelte';
-	import EditProductForm from '$lib/ui/EditProductForm.svelte';
-
 	type Props = {
 		product: Product;
 
