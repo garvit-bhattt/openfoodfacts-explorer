@@ -67,20 +67,9 @@ export async function updateBarcode(
 	body.append('new_code', newCode);
 
 	try {
-		// We use the SDK's OpenAPI client since `addOrEditProductV2` explicitly drops `new_code`.
-		const { data, error, response } = await off.apiv2.client.POST('/cgi/product_jqm2.pl', {
-			// @ts-expect-error - sending FormData using the client manually
-			body: body,
-			bodySerializer: (b) => b
-		});
-
-		if (error || !response.ok) {
-			console.error('Failed to update barcode:', response.status, response.statusText);
-			return false;
-		}
-
-		// The endpoint returns JSON like { status: 1, status_verbose: "..." }
-		return (data as any)?.status === 1 || (data as any)?.status_code === 0 || response.ok;
+		// @ts-expect-error - new method added in upcoming SDK version
+		const success = await off.apiv2.changeBarcode(currentCode, newCode);
+		return success;
 	} catch (error) {
 		console.error('Error updating barcode:', error);
 		return false;
