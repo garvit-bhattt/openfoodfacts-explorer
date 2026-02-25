@@ -1,21 +1,17 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { _ } from '$lib/i18n';
-	import { updateBarcode } from '$lib/api';
-	import { getToastCtx } from '$lib/stores/toasts';
 
 	import IconMdiBarcode from '@iconify-svelte/mdi/barcode';
 
 	type Props = {
 		currentCode: string;
+		onCorrect: (newCode: string) => Promise<void>;
 	};
 
-	let { currentCode }: Props = $props();
+	let { currentCode, onCorrect }: Props = $props();
 
 	let newCode = $state('');
 	let isSubmitting = $state(false);
-
-	const toast = getToastCtx();
 
 	async function handleSubmit() {
 		const trimmedCode = newCode.trim();
@@ -26,19 +22,7 @@
 		isSubmitting = true;
 
 		try {
-			const success = await updateBarcode(fetch, currentCode, trimmedCode);
-
-			if (success) {
-				toast.success($_('product.moderator.barcode_correction_success'));
-				// Redirect to the new product page after a short delay
-				setTimeout(() => {
-					goto(`/products/${trimmedCode}`);
-				}, 1500);
-			} else {
-				toast.error($_('product.moderator.barcode_correction_error'));
-			}
-		} catch {
-			toast.error($_('product.moderator.barcode_correction_error'));
+			await onCorrect(trimmedCode);
 		} finally {
 			isSubmitting = false;
 		}

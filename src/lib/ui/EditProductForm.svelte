@@ -29,6 +29,7 @@
 
 		isSubmitting: boolean;
 		submit: () => Promise<void>;
+		onCorrectBarcode: (newCode: string) => Promise<void>;
 		comment: string;
 		handleNutrimentInput: (e: Event, key: string) => void;
 
@@ -62,7 +63,8 @@
 		originNames,
 		countriesNames,
 		isSubmitting,
-		submit
+		submit,
+		onCorrectBarcode
 	}: Props = $props();
 </script>
 
@@ -160,7 +162,7 @@
 				<p class="text-base-content/70 mb-4 text-sm">
 					{$_('product.edit.info.moderator_tools')}
 				</p>
-				<BarcodeCorrectionCard currentCode={product.code} />
+				<BarcodeCorrectionCard currentCode={product.code} onCorrect={onCorrectBarcode} />
 			</div>
 		</div>
 	{/if}
