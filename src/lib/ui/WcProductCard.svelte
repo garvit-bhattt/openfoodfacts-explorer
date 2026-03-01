@@ -21,7 +21,7 @@ Wraps the <product-card> web component and adds accessibility features.
 	let { product, personalScore }: Props = $props();
 
 	let sanitizedProduct = $derived.by(() => {
-		const p = product as any;
+		const p = product as Product;
 		return {
 			...product,
 			brands: p.brands
